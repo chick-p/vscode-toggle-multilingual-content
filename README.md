@@ -1,6 +1,6 @@
-# vscode-quick-multilingual-content README
+# vscode-quick-toggle-multilingual-content
 
-This is the README for your extension "vscode-quick-multilingual-content". After writing up a brief description, we recommend including the following sections.
+This is the README for your extension "vscode-quick-toggle-multilingual-content". After writing up a brief description, we recommend including the following sections.
 
 ## Features
 

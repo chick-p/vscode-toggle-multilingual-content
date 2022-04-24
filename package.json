@@ -1,6 +1,6 @@
 {
-  "name": "vscode-quick-multilingual-content",
-  "displayName": "vscode-quick-multilingual-content",
+  "name": "vscode-quick-toggle-multilingual-content",
+  "displayName": "vscode-quick-toggle-multilingual-content",
   "description": "Switch multilingual contents with shortcut key",
   "version": "0.0.1",
   "engines": {
@@ -10,16 +10,51 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:vscode-quick-multilingual-content.helloWorld"
+    "onCommand:com.github.chick-p.vscode-quick-toggle-multilingual-content.toggle"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "vscode-quick-multilingual-content.helloWorld",
-        "title": "Hello World"
+        "command": "com.github.chick-p.vscode-quick-toggle-multilingual-content.toggle",
+        "title": "Toggle Multilingual Content File"
       }
-    ]
+    ],
+    "keybindings": [
+      {
+        "mac": "cmd+9",
+        "key": "ctrl+9",
+        "command": "com.github.chick-p.vscode-quick-toggle-multilingual-content.toggle"
+      }
+    ],
+    "configuration": {
+      "title": "Toggle Quick Multilingual Content",
+      "properties": {
+        "vscode-quick-toggle-multilingual-content.languages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "ja",
+            "en",
+            "zh",
+            "zh-tw"
+          ],
+          "description": "A list of languages"
+        },
+        "vscode-quick-toggle-multilingual-content.contentDir": {
+          "type": "string",
+          "default": "content",
+          "description": "The directory of content files."
+        },
+        "vscode-quick-toggle-multilingual-content.isManagedByFilename": {
+          "type": "boolean",
+          "default": false,
+          "description": "Manage content files by filename as `about.fr.md`"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "yarn run compile",

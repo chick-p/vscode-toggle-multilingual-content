@@ -1,32 +1,63 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
+import * as path from "path";
+import * as fs from "fs";
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
+import { getConfig } from "./config";
+
 export function activate(context: vscode.ExtensionContext) {
-  // Use the console to output diagnostic information (console.log) and errors (console.error)
-  // This line of code will only be executed once when your extension is activated
-  console.log(
-    'Congratulations, your extension "vscode-quick-multilingual-content" is now active!'
-  );
+  console.log('"vscode-quick-toggle-multilingual-content" is now active!');
 
-  // The command has been defined in the package.json file
-  // Now provide the implementation of the command with registerCommand
-  // The commandId parameter must match the command field in package.json
-  let disposable = vscode.commands.registerCommand(
-    "vscode-quick-multilingual-content.helloWorld",
-    () => {
-      // The code you place here will be executed every time your command is executed
-      // Display a message box to the user
-      vscode.window.showInformationMessage(
-        "Hello World from vscode-quick-multilingual-content!"
+  const buildLanguageFileNames = (fileName: string) => {
+    const contentDir = getConfig("contentDir");
+    const languages = getConfig("languages");
+    const isManagedByFilename = getConfig("isManagedByFilename");
+
+    // example: foo.en.md
+    if (isManagedByFilename) {
+      const extname = path.extname(fileName);
+      const regexp = new RegExp(`.(${languages.join("|")})(${extname})`);
+      return languages.map((language) =>
+        fileName.replace(regexp, `.${language}$2`)
       );
     }
-  );
+    // example: content/en/foo.md
+    const regexp = new RegExp(
+      `(${contentDir}${path.sep})(${languages.join("|")})`
+    );
+    return languages.map((language) =>
+      fileName.replace(regexp, `$1${language}`)
+    );
+  };
 
+  const disposable = vscode.commands.registerCommand(
+    "com.github.chick-p.vscode-quick-toggle-multilingual-content.toggle",
+    async () => {
+      const editor = vscode.window.activeTextEditor;
+      if (!editor) {
+        return;
+      }
+      const openedFileName = editor.document.fileName;
+      const languageFileNames = [
+        ...new Set(buildLanguageFileNames(openedFileName)),
+      ];
+      const existingLanguageFileNames = languageFileNames.filter((fileName) =>
+        fs.existsSync(fileName)
+      );
+      const selectedFileName = await vscode.window.showQuickPick(
+        existingLanguageFileNames,
+        {
+          placeHolder: "Please select a file.",
+        }
+      );
+      if (selectedFileName) {
+        const document = await vscode.workspace.openTextDocument(
+          selectedFileName
+        );
+        vscode.window.showTextDocument(document, -1);
+      }
+    }
+  );
   context.subscriptions.push(disposable);
 }
 
-// this method is called when your extension is deactivated
 export function deactivate() {}
