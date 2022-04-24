@@ -23,8 +23,8 @@ jobs:
         id: version
         uses: notiz-dev/github-action-json-property@release
         with:
-          path: 'package.json'
-          prop_path: 'version'
+          path: "package.json"
+          prop_path: "version"
 
       - name: Release
         uses: softprops/action-gh-release@v1
