@@ -8,6 +8,9 @@ import { QuickPickItem } from "vscode";
 export function activate(context: vscode.ExtensionContext) {
   console.log('"vscode-quick-toggle-multilingual-content" is now active!');
 
+  const markCurrentLanguage = (language: string, currentLanguage: string) => {
+    return language === currentLanguage ? `${language}*` : language;
+  };
   const buildExistingLanguageFileNames = (
     fileName: string
   ): Record<string, string> => {
@@ -23,13 +26,14 @@ export function activate(context: vscode.ExtensionContext) {
       if (!matcher || matcher.length < 3) {
         return {};
       }
+      const currentLanguage = matcher[1];
       return languages.reduce<Record<string, string>>((prev, language) => {
         const otherFileName = fileName.replace(regexp, `.${language}$2`);
         return {
           ...prev,
           ...(fs.existsSync(otherFileName)
             ? {
-                [language]: otherFileName,
+                [markCurrentLanguage(language, currentLanguage)]: otherFileName,
               }
             : {}),
         };
@@ -43,11 +47,14 @@ export function activate(context: vscode.ExtensionContext) {
     if (!matcher || matcher.length < 3) {
       return {};
     }
+    const currentLanguage = matcher[2];
     return languages.reduce<Record<string, string>>((prev, language) => {
       const otherFileName = fileName.replace(regexp, `$1${language}`);
       return {
         ...prev,
-        ...(fs.existsSync(otherFileName) ? { [language]: otherFileName } : {}),
+        ...(fs.existsSync(otherFileName)
+          ? { [markCurrentLanguage(language, currentLanguage)]: otherFileName }
+          : {}),
       };
     }, {});
   };
