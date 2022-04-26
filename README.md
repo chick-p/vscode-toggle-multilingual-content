@@ -1,4 +1,4 @@
-# vscode-quick-toggle-multilingual-content
+# vscode-toggle-multilingual-content
 
 A VSCode extension that switch multilingual content files with shortcut key and command pallet.
 
@@ -9,7 +9,7 @@ Available commands:
 ```json
 "commands": [
   {
-    "command": "com.github.chick-p.vscode-quick-toggle-multilingual-content.toggle",
+    "command": "com.github.chick-p.vscode-toggle-multilingual-content.toggle",
     "title": "Toggle Multilingual Content File"
   }
 ],
@@ -17,7 +17,7 @@ Available commands:
   {
     "mac": "cmd+9",
     "key": "ctrl+9",
-    "command": "com.github.chick-p.vscode-quick-toggle-multilingual-content.toggle"
+    "command": "com.github.chick-p.vscode-toggle-multilingual-content.toggle"
   }
 ]
 ```
@@ -28,7 +28,7 @@ Available settings:
 
 ```plaintext
 // A list of languages
-"vscode-quick-toggle-multilingual-content.languages": [
+"vscode-toggle-multilingual-content.languages": [
   "ja",
   "en",
   "zh",
@@ -36,10 +36,10 @@ Available settings:
 ],
 
 // The directory of content files.
-"vscode-quick-toggle-multilingual-content.contentDir": "content",
+"vscode-toggle-multilingual-content.contentDir": "content",
 
 // Manage content files by filename as `about.fr.md
-"vscode-quick-toggle-multilingual-content.isManagedByFilename": false
+"vscode-toggle-multilingual-content.isManagedByFilename": false
 ```
 
 ## Installation
@@ -49,5 +49,5 @@ Install locally:
 
 ```shell
 npx vsce package
-code --install-extension vscode-quick-toggle-multilingual-content-0.0.1.vsix
+code --install-extension vscode-toggle-multilingual-content-0.0.1.vsix
 ```
