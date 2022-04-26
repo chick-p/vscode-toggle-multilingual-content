@@ -8,12 +8,9 @@ import { QuickPickItem } from "vscode";
 export function activate(context: vscode.ExtensionContext) {
   console.log('"vscode-quick-toggle-multilingual-content" is now active!');
 
-  const markCurrentLanguage = (language: string, currentLanguage: string) => {
-    return language === currentLanguage ? `${language}*` : language;
-  };
   const buildExistingLanguageFileNames = (
     fileName: string
-  ): Record<string, string> => {
+  ): [string, Record<string, string>] => {
     const contentDir = getConfig("contentDir");
     const languages = getConfig("languages");
     const isManagedByFilename = getConfig("isManagedByFilename");
@@ -24,20 +21,24 @@ export function activate(context: vscode.ExtensionContext) {
       const regexp = new RegExp(`.(${languages.join("|")})(${extname})`);
       const matcher = fileName.match(regexp);
       if (!matcher || matcher.length < 3) {
-        return {};
+        return ["", {}];
       }
       const currentLanguage = matcher[1];
-      return languages.reduce<Record<string, string>>((prev, language) => {
-        const otherFileName = fileName.replace(regexp, `.${language}$2`);
-        return {
-          ...prev,
-          ...(fs.existsSync(otherFileName)
-            ? {
-                [markCurrentLanguage(language, currentLanguage)]: otherFileName,
-              }
-            : {}),
-        };
-      }, {});
+      const otherLanguageFiles = languages.reduce<Record<string, string>>(
+        (prev, language) => {
+          const otherFileName = fileName.replace(regexp, `.${language}$2`);
+          return {
+            ...prev,
+            ...(fs.existsSync(otherFileName)
+              ? {
+                  [language]: otherFileName,
+                }
+              : {}),
+          };
+        },
+        {}
+      );
+      return [currentLanguage, otherLanguageFiles];
     }
     // example: content/en/foo.md
     const regexp = new RegExp(
@@ -45,18 +46,24 @@ export function activate(context: vscode.ExtensionContext) {
     );
     const matcher = fileName.match(regexp);
     if (!matcher || matcher.length < 3) {
-      return {};
+      return ["", {}];
     }
     const currentLanguage = matcher[2];
-    return languages.reduce<Record<string, string>>((prev, language) => {
-      const otherFileName = fileName.replace(regexp, `$1${language}`);
-      return {
-        ...prev,
-        ...(fs.existsSync(otherFileName)
-          ? { [markCurrentLanguage(language, currentLanguage)]: otherFileName }
-          : {}),
-      };
-    }, {});
+    const otherLanguageFiles = languages.reduce<Record<string, string>>(
+      (prev, language) => {
+        const otherFileName = fileName.replace(regexp, `$1${language}`);
+        return {
+          ...prev,
+          ...(fs.existsSync(otherFileName)
+            ? {
+                [language]: otherFileName,
+              }
+            : {}),
+        };
+      },
+      {}
+    );
+    return [currentLanguage, otherLanguageFiles];
   };
 
   const disposable = vscode.commands.registerCommand(
@@ -67,12 +74,21 @@ export function activate(context: vscode.ExtensionContext) {
         return;
       }
       const openedFileName = editor.document.fileName;
-      const existingLanguageFileNames =
+      const [currentLanguage, existingLanguageFileNames] =
         buildExistingLanguageFileNames(openedFileName);
+      const currentFileMark = "*";
       const quickPickItems = Object.entries(existingLanguageFileNames).reduce<
         Array<QuickPickItem>
       >((prev, [language, filename]) => {
-        return [...prev, { label: language, detail: filename }];
+        return [
+          ...prev,
+          {
+            label: `${language}${
+              language === currentLanguage ? ` ${currentFileMark}` : ""
+            }`,
+            detail: filename,
+          },
+        ];
       }, []);
       if (quickPickItems.length === 0) {
         vscode.window.showInformationMessage("Not found other file.");
