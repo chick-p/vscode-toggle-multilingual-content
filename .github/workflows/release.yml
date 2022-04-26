@@ -31,4 +31,4 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: vscode-quick-toggle-multilingual-content-${{steps.version.outputs.prop}}.vsix
+          files: vscode-toggle-multilingual-content-${{steps.version.outputs.prop}}.vsix
