@@ -6,7 +6,7 @@ import { getConfig } from "./config";
 import { QuickPickItem } from "vscode";
 
 export function activate(context: vscode.ExtensionContext) {
-  console.log('"vscode-quick-toggle-multilingual-content" is now active!');
+  console.log('"vscode-toggle-multilingual-content" is now active!');
 
   const buildLanguageFileNames = (
     fileName: string
@@ -74,7 +74,7 @@ export function activate(context: vscode.ExtensionContext) {
     );
 
   const disposable = vscode.commands.registerCommand(
-    "com.github.chick-p.vscode-quick-toggle-multilingual-content.toggle",
+    "com.github.chick-p.vscode-toggle-multilingual-content.toggle",
     async () => {
       const editor = vscode.window.activeTextEditor;
       if (!editor) {
