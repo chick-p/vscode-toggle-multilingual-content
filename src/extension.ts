@@ -8,7 +8,7 @@ import { QuickPickItem } from "vscode";
 export function activate(context: vscode.ExtensionContext) {
   console.log('"vscode-quick-toggle-multilingual-content" is now active!');
 
-  const buildExistingLanguageFileNames = (
+  const buildLanguageFileNames = (
     fileName: string
   ): [string, Record<string, string>] => {
     const contentDir = getConfig("contentDir");
@@ -66,6 +66,13 @@ export function activate(context: vscode.ExtensionContext) {
     return [currentLanguage, otherLanguageFiles];
   };
 
+  const filterExistedFile = (fileNames: Record<string, string>) =>
+    Object.fromEntries(
+      Object.entries(fileNames).filter(([_language, fileName]) =>
+        fs.existsSync(fileName)
+      )
+    );
+
   const disposable = vscode.commands.registerCommand(
     "com.github.chick-p.vscode-quick-toggle-multilingual-content.toggle",
     async () => {
@@ -74,10 +81,11 @@ export function activate(context: vscode.ExtensionContext) {
         return;
       }
       const openedFileName = editor.document.fileName;
-      const [currentLanguage, existingLanguageFileNames] =
-        buildExistingLanguageFileNames(openedFileName);
+      const [currentLanguage, languageFileNames] =
+        buildLanguageFileNames(openedFileName);
+      const existedLanguageFileNames = filterExistedFile(languageFileNames);
       const currentFileMark = "*";
-      const quickPickItems = Object.entries(existingLanguageFileNames).reduce<
+      const quickPickItems = Object.entries(existedLanguageFileNames).reduce<
         Array<QuickPickItem>
       >((prev, [language, filename]) => {
         return [
