@@ -10,17 +10,19 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Use Node.js 14.x
+      - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 14.x
+          node-version: 16
+          cache: "yarn"
 
-      - name: yarn install
-        run: |
-          yarn install
-          yarn pkg
+      - name: Install dependencies
+        run: yarn install
 
-      - name: get version
+      - name: Package a extention
+        run: yarn pkg
+
+      - name: Get version
         id: version
         uses: notiz-dev/github-action-json-property@release
         with:
