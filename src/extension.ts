@@ -18,7 +18,7 @@ export function activate(context: vscode.ExtensionContext) {
     // example: foo.en.md
     if (isManagedByFilename) {
       const extname = path.extname(fileName);
-      const regexp = new RegExp(`.(${languages.join("|")})(${extname})`);
+      const regexp = new RegExp(`\\.(.+?)(.md)$`);
       const matcher = fileName.match(regexp);
       if (!matcher || matcher.length < 3) {
         return ["", {}];
@@ -41,9 +41,7 @@ export function activate(context: vscode.ExtensionContext) {
       return [currentLanguage, otherLanguageFiles];
     }
     // example: content/en/foo.md
-    const regexp = new RegExp(
-      `(${contentDir}${path.sep})(${languages.join("|")})`
-    );
+    const regexp = new RegExp(`(${contentDir}${path.sep})(.+?)${path.sep}`);
     const matcher = fileName.match(regexp);
     if (!matcher || matcher.length < 3) {
       return ["", {}];
@@ -51,7 +49,10 @@ export function activate(context: vscode.ExtensionContext) {
     const currentLanguage = matcher[2];
     const otherLanguageFiles = languages.reduce<Record<string, string>>(
       (prev, language) => {
-        const otherFileName = fileName.replace(regexp, `$1${language}`);
+        const otherFileName = fileName.replace(
+          regexp,
+          `$1${language}${path.sep}`
+        );
         return {
           ...prev,
           ...(fs.existsSync(otherFileName)
