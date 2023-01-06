@@ -14,10 +14,10 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: "yarn"
+          cache: "npm"
 
       - name: Install dependencies
-        run: yarn install
+        run: npm install
 
       - name: Run test
-        run: xvfb-run -a yarn test
+        run: xvfb-run -a npm run test

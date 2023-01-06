@@ -1,4 +1,4 @@
-name: release
+name: Release
 on:
   push:
     tags:
@@ -14,13 +14,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: "yarn"
+          cache: "npm"
 
       - name: Install dependencies
-        run: yarn install
+        run: npm run install
 
       - name: Package a extention
-        run: yarn pkg
+        run: npm run pkg
 
       - name: Get version
         id: version
