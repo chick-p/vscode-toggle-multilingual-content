@@ -1,11 +1,11 @@
-name: Release
+name: Packaging
 on:
   push:
     tags:
       - "v*"
 
 jobs:
-  release:
+  packaging:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
