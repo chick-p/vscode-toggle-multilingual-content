@@ -29,17 +29,10 @@ jobs:
         run: npm ci
 
       - name: Package a extention
-        run: npm run pkg
-
-      - name: Get version
-        id: version
-        uses: notiz-dev/github-action-json-property@release
-        with:
-          path: "package.json"
-          prop_path: "version"
-
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: vscode-toggle-multilingual-content-${{steps.version.outputs.prop}}.vsix
+        run: |
+          git pull --rebase origin main
+          npm run pkg
+          version=$(echo ${{ inputs.version }} | sed -E 's/v([0-9.]+)/\1/')
+          gh release upload ${{ inputs.version }} vscode-toggle-multilingual-content-"$version".vsix
+        env:
+          GH_TOKEN: ${{ github.token }}
