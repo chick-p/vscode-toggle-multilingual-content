@@ -20,6 +20,14 @@
         "title": "Toggle Multilingual Content File"
       }
     ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "com.github.chick-p.vscode-toggle-multilingual-content.toggle",
+          "when": "editorLangId == 'markdown'"
+        }
+      ]
+    },
     "keybindings": [
       {
         "mac": "cmd+9",
