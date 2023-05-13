@@ -1,6 +1,6 @@
 import * as path from "path";
 import Mocha from "mocha";
-import glob from "glob";
+import glob, { Glob } from "glob";
 
 export async function run(): Promise<void> {
   // Create the mocha test
@@ -13,9 +13,11 @@ export async function run(): Promise<void> {
 
   try {
     // Glob test files
-    const jsFiles = await glob("**/**.test.js", { cwd: testsRoot });
-    jsFiles.forEach((f) => mocha.addFile(path.resolve(testsRoot, f)));
+    const jsFiles = new Glob("**/**.test.js", { cwd: testsRoot });
 
+    for await (const jsFile of jsFiles) {
+      mocha.addFile(path.resolve(testsRoot, jsFile));
+    }
     mocha.run((failures: any) => {
       if (failures > 0) {
         throw new Error(`${failures} tests failed.`);
