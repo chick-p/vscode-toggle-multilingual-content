@@ -13,7 +13,7 @@ interface GetConfig {
 
 export const getConfig: GetConfig = <K extends keyof Config>(key?: K) => {
   const config = vscode.workspace.getConfiguration(
-    "vscode-toggle-multilingual-content"
+    "vscode-toggle-multilingual-content",
   );
   return key ? config[key] : config;
 };

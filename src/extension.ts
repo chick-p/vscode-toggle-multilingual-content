@@ -9,7 +9,7 @@ export function activate(context: vscode.ExtensionContext) {
   console.log('"vscode-toggle-multilingual-content" is now active!');
 
   const buildLanguageFileNames = (
-    fileName: string
+    fileName: string,
   ): [string, Record<string, string>] => {
     const contentDir = getConfig("contentDir");
     const languages = getConfig("languages");
@@ -36,7 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
               : {}),
           };
         },
-        {}
+        {},
       );
       return [currentLanguage, otherLanguageFiles];
     }
@@ -51,7 +51,7 @@ export function activate(context: vscode.ExtensionContext) {
       (prev, language) => {
         const otherFileName = fileName.replace(
           regexp,
-          `$1${language}${path.sep}`
+          `$1${language}${path.sep}`,
         );
         return {
           ...prev,
@@ -62,7 +62,7 @@ export function activate(context: vscode.ExtensionContext) {
             : {}),
         };
       },
-      {}
+      {},
     );
     return [currentLanguage, otherLanguageFiles];
   };
@@ -70,8 +70,8 @@ export function activate(context: vscode.ExtensionContext) {
   const filterExistedFile = (fileNames: Record<string, string>) =>
     Object.fromEntries(
       Object.entries(fileNames).filter(([_language, fileName]) =>
-        fs.existsSync(fileName)
-      )
+        fs.existsSync(fileName),
+      ),
     );
 
   const disposable = vscode.commands.registerCommand(
@@ -108,11 +108,11 @@ export function activate(context: vscode.ExtensionContext) {
       });
       if (pickedItem && pickedItem.detail) {
         const document = await vscode.workspace.openTextDocument(
-          pickedItem.detail
+          pickedItem.detail,
         );
         vscode.window.showTextDocument(document, -1);
       }
-    }
+    },
   );
   context.subscriptions.push(disposable);
 }
