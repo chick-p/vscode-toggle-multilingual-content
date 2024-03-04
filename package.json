@@ -2,7 +2,7 @@
   "name": "vscode-toggle-multilingual-content",
   "displayName": "vscode-toggle-multilingual-content",
   "description": "Switch multilingual contents with shortcut key",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "engines": {
     "vscode": "^1.77.0"
   },
