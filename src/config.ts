@@ -2,8 +2,7 @@ import * as vscode from "vscode";
 
 type Config = {
   languages: Array<string>;
-  contentDir: string;
-  isManagedByFilename: boolean;
+  contentPatterns: Array<string>;
 };
 
 interface GetConfig {
