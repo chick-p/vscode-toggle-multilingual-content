@@ -48,7 +48,16 @@ Available settings:
 This extension is not available on VSCode Marketplace.  
 Install locally:
 
+The extension file can be downloaded from [Assets] in [Releases page](https://github.com/chick-p/vscode-toggle-multilingual-content/releases).  
+Install the extension into your VSCode by following command.
+
 ```shell
-npx vsce package
 code --install-extension vscode-toggle-multilingual-content-0.2.0.vsix
+```
+
+The following command packages the extension directory to generate vsix files.
+
+```shell
+npm install
+npx vsce package
 ```
