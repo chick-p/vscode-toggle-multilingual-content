@@ -50,5 +50,5 @@ Install locally:
 
 ```shell
 npx vsce package
-code --install-extension vscode-toggle-multilingual-content-0.0.1.vsix
+code --install-extension vscode-toggle-multilingual-content-0.2.0.vsix
 ```
