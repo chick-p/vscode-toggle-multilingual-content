@@ -27,6 +27,6 @@ jobs:
           npm run pkg
           version=$(echo "${GITHUB_REF_NAME}" | sed -E "s/v([0-9.]+)/\1/")
           file=vscode-toggle-multilingual-content-"$version".vsix
-          gh release create v"$version" "$file"
+          gh release create v"$version" "$file" --generate-notes
         env:
           GH_TOKEN: ${{ github.token }}
