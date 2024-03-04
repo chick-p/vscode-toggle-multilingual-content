@@ -27,7 +27,7 @@ Available commands:
 Available settings:
 
 ```plaintext
-// A list of languages
+// The language list
 "vscode-toggle-multilingual-content.languages": [
   "ja",
   "en",
@@ -35,11 +35,12 @@ Available settings:
   "zh-tw"
 ],
 
-// The directory of content files.
-"vscode-toggle-multilingual-content.contentDir": "content",
+// The directory list of content file
+"vscode-toggle-multilingual-content.contentPatterns": [
+  "content/<lang>/",
+  "static/img-<lang>/"
+]
 
-// Manage content files by filename as `about.fr.md
-"vscode-toggle-multilingual-content.isManagedByFilename": false
 ```
 
 ## Installation
