@@ -1,12 +1,9 @@
 name: Run release
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: "Version"
-        required: true
-        type: string
+  push:
+    tags:
+      - "v*"
 
 permissions:
   contents: write
@@ -28,7 +25,8 @@ jobs:
       - name: Package a extention
         run: |
           npm run pkg
-          version=$(echo ${{ inputs.version }} | sed -E 's/v([0-9.]+)/\1/')
-          gh release upload ${{ inputs.version }} vscode-toggle-multilingual-content-"$version".vsix
+          version=$(echo "${GITHUB_REF_NAME}" | sed -E "s/v([0-9.]+)/\1/")
+          file=vscode-toggle-multilingual-content-"$version".vsix
+          gh release create v"$version" "$file" --generate-notes
         env:
           GH_TOKEN: ${{ github.token }}
