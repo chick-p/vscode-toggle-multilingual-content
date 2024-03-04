@@ -8,15 +8,12 @@ on:
         required: true
         type: string
 
-jobs:
-  release:
-    uses: chick-p/github-actions-shared-workflow/.github/workflows/release-npm-package.yml@main
-    with:
-      version: ${{ inputs.version }}
+permissions:
+  contents: write
 
+jobs:
   packaging:
     runs-on: ubuntu-latest
-    needs: release
     steps:
       - uses: actions/checkout@v4
 
@@ -30,7 +27,6 @@ jobs:
 
       - name: Package a extention
         run: |
-          git pull --rebase origin main
           npm run pkg
           version=$(echo ${{ inputs.version }} | sed -E 's/v([0-9.]+)/\1/')
           gh release upload ${{ inputs.version }} vscode-toggle-multilingual-content-"$version".vsix
