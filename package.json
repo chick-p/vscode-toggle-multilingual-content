@@ -46,7 +46,7 @@
             "zh",
             "zh-tw"
           ],
-          "description": "A list of languages"
+          "description": "The language list"
         },
         "vscode-toggle-multilingual-content.contentPatterns": {
           "type": "array",
@@ -57,7 +57,7 @@
             "content/<lang>/",
             "static/img-<lang>/"
           ],
-          "description": "The directory of content files."
+          "description": "The directory list of content file"
         }
       }
     }
