@@ -9,9 +9,6 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    "onCommand:com.github.chick-p.vscode-toggle-multilingual-content.toggle"
-  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -51,15 +48,16 @@
           ],
           "description": "A list of languages"
         },
-        "vscode-toggle-multilingual-content.contentDir": {
-          "type": "string",
-          "default": "content",
+        "vscode-toggle-multilingual-content.contentPatterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "content/<lang>/",
+            "static/img-<lang>/"
+          ],
           "description": "The directory of content files."
-        },
-        "vscode-toggle-multilingual-content.isManagedByFilename": {
-          "type": "boolean",
-          "default": false,
-          "description": "Manage content files by filename as `about.fr.md`"
         }
       }
     }

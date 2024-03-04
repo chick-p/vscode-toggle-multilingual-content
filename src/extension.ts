@@ -5,102 +5,102 @@ import * as fs from "fs";
 import { getConfig } from "./config";
 import { QuickPickItem } from "vscode";
 
+type Candidate = {
+  path: string;
+  lang: string;
+};
+
+type Uriable = {
+  uri: vscode.Uri;
+};
+
 export function activate(context: vscode.ExtensionContext) {
   console.log('"vscode-toggle-multilingual-content" is now active!');
 
-  const buildLanguageFileNames = (
+  const getCandidatesFromCurrentFileName = (
     fileName: string,
-  ): [string, Record<string, string>] => {
-    const contentDir = getConfig("contentDir");
-    const languages = getConfig("languages");
-    const isManagedByFilename = getConfig("isManagedByFilename");
-
-    // example: foo.en.md
-    if (isManagedByFilename) {
-      const extname = path.extname(fileName);
-      const regexp = new RegExp(`\\.(.+?)(.md)$`);
-      const matcher = fileName.match(regexp);
-      if (!matcher || matcher.length < 3) {
-        return ["", {}];
-      }
-      const currentLanguage = matcher[1];
-      const otherLanguageFiles = languages.reduce<Record<string, string>>(
-        (prev, language) => {
-          const otherFileName = fileName.replace(regexp, `.${language}$2`);
-          return {
-            ...prev,
-            ...(fs.existsSync(otherFileName)
-              ? {
-                  [language]: otherFileName,
-                }
-              : {}),
-          };
-        },
-        {},
+    contentPatterns: Array<string>,
+    languages: Array<string>,
+  ): Array<Candidate> => {
+    for (const contentPattern of contentPatterns) {
+      // content/ja/, content/en/
+      const candidatePrefixes = languages.map((language) =>
+        contentPattern.replace("<lang>", language),
       );
-      return [currentLanguage, otherLanguageFiles];
+
+      // content/ja/
+      const matchedPrefix = candidatePrefixes.find((prefix) =>
+        fileName.startsWith(prefix),
+      );
+
+      if (matchedPrefix) {
+        // foo.md
+        const restPath = fileName.replace(matchedPrefix, "");
+        const candidates = languages.map((language) => {
+          return {
+            lang: language,
+            path: contentPattern.replace("<lang>", language) + restPath,
+          };
+        });
+        return candidates;
+      }
     }
-    // example: content/en/foo.md
-    const regexp = new RegExp(`(${contentDir}${path.sep})(.+?)${path.sep}`);
-    const matcher = fileName.match(regexp);
-    if (!matcher || matcher.length < 3) {
-      return ["", {}];
-    }
-    const currentLanguage = matcher[2];
-    const otherLanguageFiles = languages.reduce<Record<string, string>>(
-      (prev, language) => {
-        const otherFileName = fileName.replace(
-          regexp,
-          `$1${language}${path.sep}`,
-        );
-        return {
-          ...prev,
-          ...(fs.existsSync(otherFileName)
-            ? {
-                [language]: otherFileName,
-              }
-            : {}),
-        };
-      },
-      {},
-    );
-    return [currentLanguage, otherLanguageFiles];
+    return [];
   };
 
-  const filterExistedFile = (fileNames: Record<string, string>) =>
-    Object.fromEntries(
-      Object.entries(fileNames).filter(([_language, fileName]) =>
-        fs.existsSync(fileName),
-      ),
+  const filterExistingFile = (
+    workspacePath: string,
+    candidates: Array<Candidate>,
+  ): Array<Candidate> =>
+    candidates.filter((candidate) =>
+      fs.existsSync(path.join(workspacePath, candidate.path)),
     );
+
+  const getWorkspacePath = (uri: vscode.Uri): string => {
+    const folder = vscode.workspace.getWorkspaceFolder(uri);
+    return folder?.uri.fsPath.replace(/\\/g, "/") || "";
+  };
+
+  const getRelativeFilePath = (uri: vscode.Uri): string => {
+    const workspacePath = getWorkspacePath(uri);
+    const currentFileName = uri.fsPath;
+    return currentFileName.replace(`${workspacePath}/`, "");
+  };
 
   const disposable = vscode.commands.registerCommand(
     "com.github.chick-p.vscode-toggle-multilingual-content.toggle",
     async () => {
-      const editor = vscode.window.activeTextEditor;
-      if (!editor) {
+      const { uri } = vscode.window.tabGroups.activeTabGroup.activeTab
+        ?.input as Uriable;
+      if (!uri) {
         return;
       }
-      const openedFileName = editor.document.fileName;
-      const [currentLanguage, languageFileNames] =
-        buildLanguageFileNames(openedFileName);
-      const existedLanguageFileNames = filterExistedFile(languageFileNames);
-      const currentFileMark = "*";
-      const quickPickItems = Object.entries(existedLanguageFileNames).reduce<
-        Array<QuickPickItem>
-      >((prev, [language, filename]) => {
-        return [
-          ...prev,
-          {
-            label: `${language}${
-              language === currentLanguage ? ` ${currentFileMark}` : ""
-            }`,
-            detail: filename,
-          },
-        ];
-      }, []);
+
+      const workspacePath = getWorkspacePath(uri);
+      const relativeFileName = getRelativeFilePath(uri);
+
+      const contentPatterns = getConfig("contentPatterns");
+      const languages = getConfig("languages");
+
+      const candidates = getCandidatesFromCurrentFileName(
+        relativeFileName,
+        contentPatterns,
+        languages,
+      );
+
+      const existingCandidates = filterExistingFile(workspacePath, candidates);
+
+      const quickPickItems = existingCandidates.map((candidate) => {
+        return {
+          label: `${candidate.lang}${
+            candidate.path === relativeFileName ? ` *` : ""
+          }`,
+          detail: candidate.path,
+        };
+      });
+
       if (quickPickItems.length === 0) {
-        vscode.window.showInformationMessage("Not found other file.");
+        vscode.window.showInformationMessage("Not found file.");
         return;
       }
       const pickedItem = await vscode.window.showQuickPick(quickPickItems, {
@@ -108,7 +108,7 @@ export function activate(context: vscode.ExtensionContext) {
       });
       if (pickedItem && pickedItem.detail) {
         const document = await vscode.workspace.openTextDocument(
-          pickedItem.detail,
+          path.join(workspacePath, pickedItem.detail),
         );
         vscode.window.showTextDocument(document, -1);
       }
