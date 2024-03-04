@@ -4,7 +4,7 @@
   "description": "Switch multilingual contents with shortcut key",
   "version": "0.1.0",
   "engines": {
-    "vscode": "^1.87.0"
+    "vscode": "^1.77.0"
   },
   "categories": [
     "Other"
