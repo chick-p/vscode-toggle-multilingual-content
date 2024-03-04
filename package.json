@@ -9,9 +9,6 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    "onCommand:com.github.chick-p.vscode-toggle-multilingual-content.toggle"
-  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
