@@ -107,10 +107,11 @@ export function activate(context: vscode.ExtensionContext) {
         placeHolder: "Please select a file.",
       });
       if (pickedItem && pickedItem.detail) {
-        const document = await vscode.workspace.openTextDocument(
-          path.join(workspacePath, pickedItem.detail),
+        const filePath = path.join(workspacePath, pickedItem.detail);
+        vscode.commands.executeCommand(
+          "vscode.open",
+          vscode.Uri.file(filePath),
         );
-        vscode.window.showTextDocument(document, -1);
       }
     },
   );
