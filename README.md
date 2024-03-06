@@ -52,7 +52,7 @@ The extension file can be downloaded from [Assets] in [Releases page](https://gi
 Install the extension into your VSCode by following command.
 
 ```shell
-code --install-extension vscode-toggle-multilingual-content-0.2.0.vsix
+code --install-extension vscode-toggle-multilingual-content-0.2.1.vsix
 ```
 
 The following command packages the extension directory to generate vsix files.
