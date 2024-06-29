@@ -75,7 +75,7 @@
     "fix": "run-s fix:*",
     "fix:prettier": "prettier -w .",
     "fix:eslint": "pnpm run lint:eslint --fix",
-    "test": "node ./out/test/runTest.js",
+    "test": "pnpm run compile && node ./out/test/runTest.js",
     "pkg": "vsce package"
   },
   "devDependencies": {
