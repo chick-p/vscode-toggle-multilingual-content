@@ -64,17 +64,17 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
+    "vscode:prepublish": "pnpm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
+    "pretest": "pnpm run compile && pnpm run lint",
     "lint": "run-p lint:*",
     "lint:tsc": "tsc --noEmit",
     "lint:prettier": "prettier --check .",
     "lint:eslint": "eslint \"src/**/*.ts\"",
     "fix": "run-s fix:*",
     "fix:prettier": "prettier -w .",
-    "fix:eslint": "npm run lint:eslint --fix",
+    "fix:eslint": "pnpm run lint:eslint --fix",
     "test": "node ./out/test/runTest.js",
     "pkg": "vsce package"
   },
