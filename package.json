@@ -4,7 +4,7 @@
   "description": "Switch multilingual contents with shortcut key",
   "version": "0.2.1",
   "engines": {
-    "vscode": "^1.87.0"
+    "vscode": "^1.90.0"
   },
   "categories": [
     "Other"
@@ -64,18 +64,18 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
+    "vscode:prepublish": "pnpm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
+    "pretest": "pnpm run compile && pnpm run lint",
     "lint": "run-p lint:*",
     "lint:tsc": "tsc --noEmit",
     "lint:prettier": "prettier --check .",
     "lint:eslint": "eslint \"src/**/*.ts\"",
     "fix": "run-s fix:*",
     "fix:prettier": "prettier -w .",
-    "fix:eslint": "npm run lint:eslint --fix",
-    "test": "node ./out/test/runTest.js",
+    "fix:eslint": "pnpm run lint:eslint --fix",
+    "test": "pnpm run compile && node ./out/test/runTest.js",
     "pkg": "vsce package"
   },
   "devDependencies": {

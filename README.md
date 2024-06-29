@@ -58,6 +58,6 @@ code --install-extension vscode-toggle-multilingual-content-0.2.1.vsix
 The following command packages the extension directory to generate vsix files.
 
 ```shell
-npm install
-npx vsce package
+pnpm install
+pnpm dlx vsce package
 ```
