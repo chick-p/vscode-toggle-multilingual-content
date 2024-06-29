@@ -11,15 +11,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8
+
       - uses: actions/setup-node@v4
         with:
           node-version-file: ./.node-version
-          cache: "npm"
+          cache: "pnpm"
 
-      - name: Install dependecies
-        run: npm ci
+      - name: Install dependencies
+        run: pnpm install --shamefully-hoist
         env:
           CI: true
 
       - name: Run test
-        run: xvfb-run -a npm run test
+        run: xvfb-run -a pnpm run test
