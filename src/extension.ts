@@ -3,7 +3,6 @@ import * as path from "path";
 import * as fs from "fs";
 
 import { getConfig } from "./config";
-import { QuickPickItem } from "vscode";
 
 type Candidate = {
   path: string;
