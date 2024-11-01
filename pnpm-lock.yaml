@@ -15,8 +15,8 @@ importers:
         specifier: ^10.0.9
         version: 10.0.9
       '@types/node':
-        specifier: ^22.8.0
-        version: 22.8.0
+        specifier: ^22.8.6
+        version: 22.8.6
       '@types/vscode':
         specifier: ^1.95.0
         version: 1.95.0
@@ -148,8 +148,8 @@ packages:
   '@types/mocha@10.0.9':
     resolution: {integrity: sha512-sicdRoWtYevwxjOHNMPTl3vSfJM6oyW8o1wXeI7uww6b6xHg8eBznQDNSGBCDJmsE8UMxP05JgZRtsKbTqt//Q==}
 
-  '@types/node@22.8.0':
-    resolution: {integrity: sha512-84rafSBHC/z1i1E3p0cJwKA+CfYDNSXX9WSZBRopjIzLET8oNt6ht2tei4C7izwDeEiLLfdeSVBv1egOH916hg==}
+  '@types/node@22.8.6':
+    resolution: {integrity: sha512-tosuJYKrIqjQIlVCM4PEGxOmyg3FCPa/fViuJChnGeEIhjA46oy8FMVoF9su1/v8PNs2a8Q0iFNyOx0uOF91nw==}
 
   '@types/vscode@1.95.0':
     resolution: {integrity: sha512-0LBD8TEiNbet3NvWsmn59zLzOFu/txSlGxnv5yAFHCrhG9WvAnR3IvfHzMOs2aeWqgvNjq9pO99IUw8d3n+unw==}
@@ -1679,7 +1679,7 @@ snapshots:
   '@types/glob@8.1.0':
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 22.8.0
+      '@types/node': 22.8.6
 
   '@types/json-schema@7.0.15': {}
 
@@ -1687,7 +1687,7 @@ snapshots:
 
   '@types/mocha@10.0.9': {}
 
-  '@types/node@22.8.0':
+  '@types/node@22.8.6':
     dependencies:
       undici-types: 6.19.8
 
