@@ -82,7 +82,7 @@
     "@types/glob": "^8.1.0",
     "@types/mocha": "^10.0.9",
     "@types/node": "^22.8.0",
-    "@types/vscode": "^1.94.0",
+    "@types/vscode": "^1.95.0",
     "@vscode/test-electron": "^2.4.1",
     "eslint": "^9.13.0",
     "eslint-config-prettier": "^9.1.0",
