@@ -92,7 +92,7 @@
     "npm-run-all2": "^9.0.2",
     "prettier": "^3.9.4",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.62.1",
+    "typescript-eslint": "^8.63.0",
     "vsce": "^2.15.0"
   },
   "repository": "https://github.com/chick-p/vscode-toggle-multilingual-content",
